@@ -1,1 +1,31 @@
-
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self'">
+<title>OpenBoost</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="drag"></div>
+<aside class="rail">
+  <div class="brand">
+    <img id="logo" src="icon.png" width="24" height="24" style="border-radius: 6px; object-fit: cover;" alt="OpenBoost Logo">
+    <span>OpenBoost</span>
+  </div>
+  <nav id="nav" aria-label="Categories"></nav>
+  <div class="who" id="who"></div>
+</aside>
+<main>
+  <div class="scroll"><div class="wrap">
+    <header class="head"><div><h1 id="h"></h1><p id="hp"></p></div><span id="act"></span></header>
+    <div id="warn"></div>
+    <div id="home" hidden></div>
+    <ul id="list"></ul>
+  </div></div>
+  <div class="bar" id="bar" hidden></div>
+</main>
+<script src="renderer.js"></script>
+</body>
+</html>
