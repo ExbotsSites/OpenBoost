@@ -1,0 +1,45 @@
+{
+  "name": "openboost",
+  "version": "1.0.0",
+  "description": "System Tweaker & Optimization Utility",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "make-icons": "node tools/make-icons.js",
+    "build": "npm run make-icons && electron-builder"
+  },
+  "build": {
+    "appId": "org.openboost.app",
+    "productName": "OpenBoost",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "icon": "build/icon.png"
+    },
+    "linux": {
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "uninstallDisplayName": "OpenBoost",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "OpenBoost"
+    }
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.13.3",
+    "png-to-ico": "^2.1.8",
+    "sharp": "^0.33.5"
+  }
+}
