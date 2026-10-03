@@ -29,8 +29,9 @@ function create() {
 ipcMain.handle('list', () => engine.list());
 ipcMain.handle('apply', (_, o) => engine.apply(o));
 ipcMain.handle('relaunch', () => {
+  const appDir = path.dirname(process.execPath);
   const arg = process.defaultApp ? ` -ArgumentList '"${app.getAppPath()}"'` : '';
-  const ps = `Start-Process -FilePath '${process.execPath}'${arg} -Verb RunAs`;
+  const ps = `Start-Process -FilePath '${process.execPath}'${arg} -WorkingDirectory '${appDir}' -Verb RunAs`;
   execFile('powershell', ['-NoProfile', '-Command', ps], err => { if (!err) app.quit(); });
 });
 
