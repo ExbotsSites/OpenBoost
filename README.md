@@ -15,6 +15,17 @@ npm run dist     # build a Windows installer (asks for admin on launch)
 - **Benchmark**: run once before tweaking and once after. Also flags RAM speed, refresh rate, startup apps and processes as Good or Change now.
 - **Tweaks**: Performance, Input, Network, Debloat. Risk is Zero, Low, Medium or Extreme; "Select up to" picks everything at or below a level.
 - **BIOS guide**: firmware settings worth changing, safest first.
+- **Tools**: live overlay, disk cleanup, and a graphics and driver helper.
+- **Settings**: dark, midnight or light theme, any accent color, and five languages (English, Italiano, Español, Français, Deutsch).
+
+## Tools
+- **Live overlay**: a click-through window with CPU, memory and GPU load. Toggle it with Ctrl+Alt+O. It shows over windowed and borderless games, not exclusive fullscreen. GPU load comes from the Windows GPU Engine counters (3D engine).
+- **Disk cleanup**: empties a fixed list of temp and cache folders (user temp, Windows temp, thumbnails, shader caches, Windows Update downloads, crash dumps, Recycle Bin). It never touches documents, games or saves, and skips files that are in use. Windows temp and Update downloads need administrator.
+- **Graphics and drivers**: shows your GPU, driver version and age, hardware GPU scheduling status, and links to the vendor's official driver page, Graphics settings, Game Mode and Device Manager. OpenBoost does not download or install drivers itself.
+- **Share card**: on the Benchmark page, save your before and after result as a 1200x630 JPG (Midnight, Paper or Accent style) or copy it to the clipboard.
+
+## Translate
+All interface text lives in `renderer/i18n.js`. Copy the `en` block, translate it, and add the language code to `LANG_NAMES` there and to `LANGS` in `settings.js`. Missing keys fall back to English.
 
 ## Add a tweak
 Add a `T(id, cat, risk, name, desc, actions, extra)` entry to `tweaks.js`. Risk is 1 zero, 2 low, 3 medium, 4 extreme. Actions: `dw`/`sz` (registry), `svc` (service set to disabled), `{ t: 'power' }`, `appx` (remove apps).

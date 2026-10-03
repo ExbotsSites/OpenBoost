@@ -1,0 +1,9 @@
+html,body{margin:0;height:100%;background:transparent;overflow:hidden;font:12.5px/1.2 "Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;color:#fff;user-select:none}
+.ov{box-sizing:border-box;height:100%;padding:14px;border-radius:12px;background:rgba(12,10,18,.8);border:1px solid rgba(255,255,255,.08)}
+.r{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:8px;height:24px}
+.r span{color:rgba(255,255,255,.62)}
+.r b{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.r i{display:block;height:4px;overflow:hidden;border-radius:2px;background:rgba(255,255,255,.14)}
+.r u{display:block;height:100%;width:0;border-radius:2px;background:var(--a,#a53FFA);transition:width .4s}
+.r.t{grid-template-columns:1fr}
+.r.t b{text-align:left;font-size:13px}

@@ -17,5 +17,16 @@ contextBridge.exposeInMainWorld('openboost', {
   procs: () => ipcRenderer.invoke('procs'),
   onSpeed: cb => ipcRenderer.on('speed', (_, m) => cb(m)),
   dnsOpen: () => ipcRenderer.invoke('dns:open'),
-  flush: () => ipcRenderer.invoke('dns:flush')
+  flush: () => ipcRenderer.invoke('dns:flush'),
+  settingsGet: () => ipcRenderer.invoke('settings:get'),
+  settingsSet: p => ipcRenderer.invoke('settings:set', p),
+  settingsReset: () => ipcRenderer.invoke('settings:reset'),
+  onSettings: cb => ipcRenderer.on('settings', (_, s) => cb(s)),
+  theme: o => ipcRenderer.invoke('theme', o),
+  link: k => ipcRenderer.invoke('link', k),
+  cleanScan: () => ipcRenderer.invoke('clean:scan'),
+  cleanRun: ids => ipcRenderer.invoke('clean:run', ids),
+  gpu: () => ipcRenderer.invoke('gpu'),
+  cardSave: url => ipcRenderer.invoke('card:save', url),
+  cardCopy: url => ipcRenderer.invoke('card:copy', url)
 });

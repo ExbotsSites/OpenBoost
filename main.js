@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, screen, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, shell, dialog, clipboard, nativeImage, globalShortcut } = require('electron');
 const os = require('os');
 const fs = require('fs');
 const runBench = require('./bench');
@@ -7,6 +7,11 @@ const openDns = require('./dns');
 const { execFile } = require('child_process');
 const path = require('path');
 const engine = require('./engine');
+const settings = require('./settings');
+const overlay = require('./overlay');
+const tools = require('./tools');
+
+let mainWin = null;
 
 function create() {
   // Seleziona il file .ico generato in /build (o /renderer/icon.png se il file .ico non esiste)
@@ -24,6 +29,8 @@ function create() {
   });
   w.removeMenu();
   w.loadFile(path.join(__dirname, 'renderer', 'index.html'));
+  mainWin = w;
+  w.on('closed', () => { mainWin = null; });
 }
 
 ipcMain.handle('list', () => engine.list());
@@ -60,7 +67,7 @@ ipcMain.handle('bench', async (_, slot) => {
   return s;
 });
 ipcMain.handle('bench:reset', () => { fs.writeFileSync(benchFile(), JSON.stringify({ before: null, after: null })); return 1; });
-ipcMain.handle('open', (_, u) => { if (['ms-settings:display', 'ms-settings:startupapps'].includes(u)) shell.openExternal(u); });
+ipcMain.handle('open', (_, u) => { if (['ms-settings:display', 'ms-settings:startupapps', 'ms-settings:display-advancedgraphics', 'ms-settings:gaming-gamemode'].includes(u)) shell.openExternal(u); });
 ipcMain.handle('bios', () => execFile('shutdown', ['/r', '/fw', '/t', '5'], () => {}));
 
 ipcMain.handle('speed', async (e, id) => {
@@ -85,6 +92,44 @@ ipcMain.handle('dns:open', async () => {
 ipcMain.handle('dns:flush', () => new Promise(r => execFile('ipconfig', ['/flushdns'], (e, o, s) =>
   r((o || s || (e && e.message) || '').trim().split(/\r?\n/).filter(Boolean).pop() || 'Done'))));
 
+// ---- v2.0: settings, theme, overlay, tools, share card
+ipcMain.handle('settings:get', () => settings.get());
+ipcMain.handle('settings:set', (_, patch) => { const s = settings.set(patch); overlay.apply(s); return s; });
+ipcMain.handle('settings:reset', () => settings.reset());
+ipcMain.handle('theme', (_, o) => {
+  const hex = /^#[0-9a-f]{6}$/i;
+  if (!mainWin || !o || !hex.test(o.bg) || !hex.test(o.sym)) return;
+  try { mainWin.setBackgroundColor(o.bg); mainWin.setTitleBarOverlay({ color: o.bg, symbolColor: o.sym, height: 36 }); } catch { /* not supported on this platform */ }
+});
+ipcMain.handle('link', (_, key) => tools.openLink(String(key)));
+ipcMain.handle('clean:scan', () => tools.cleanScan());
+ipcMain.handle('clean:run', (_, ids) => tools.cleanRun(ids));
+ipcMain.handle('gpu', () => tools.gpuInfo());
+
+const JPG = /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/;
+ipcMain.handle('card:save', async (_, url) => {
+  if (typeof url !== 'string' || url.length > 12e6 || !JPG.test(url)) return { ok: false };
+  const r = await dialog.showSaveDialog(mainWin, { defaultPath: path.join(app.getPath('pictures'), 'OpenBoost-result.jpg'), filters: [{ name: 'JPEG image', extensions: ['jpg'] }] });
+  if (r.canceled || !r.filePath) return { ok: false, canceled: true };
+  try { fs.writeFileSync(r.filePath, Buffer.from(url.split(',')[1], 'base64')); return { ok: true, path: r.filePath }; }
+  catch (e) { return { ok: false, error: e.message }; }
+});
+ipcMain.handle('card:copy', (_, url) => {
+  if (typeof url !== 'string' || url.length > 12e6 || !JPG.test(url)) return { ok: false };
+  clipboard.writeImage(nativeImage.createFromDataURL(url)); return { ok: true };
+});
+
+function toggleOverlay() {
+  const s = settings.set({ overlay: { on: !settings.get().overlay.on } });
+  overlay.apply(s);
+  if (mainWin) mainWin.webContents.send('settings', s);
+}
+
 app.setAppUserModelId('org.openboost.app');
-app.whenReady().then(create);
+app.whenReady().then(() => {
+  create();
+  overlay.apply(settings.get());
+  globalShortcut.register('CommandOrControl+Alt+O', toggleOverlay);
+});
+app.on('will-quit', () => { globalShortcut.unregisterAll(); overlay.stop(); });
 app.on('window-all-closed', () => app.quit());

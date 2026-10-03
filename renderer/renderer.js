@@ -6,10 +6,12 @@ const CATS = [
   { id: 'performance', name: 'Performance', note: 'Frame rate and frame pacing.', ico: '<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>' },
   { id: 'input', name: 'Input', note: 'Mouse and keyboard response.', ico: '<path d="M5 3l14 7-6 2-2 6z"/>' },
   { id: 'network', name: 'Network', note: 'Background traffic and throttling.', ico: '<path d="M5 12a10 10 0 0 1 14 0M8 15a6 6 0 0 1 8 0M12 19h.01"/>' },
+  { id: 'tools', name: 'Tools', note: 'Overlay, disk cleanup, graphics and drivers.', ico: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.2-.5-.5-2.2z"/>' },
   { id: 'debloat', name: 'Debloat and privacy', note: 'Less running in the background, fewer promotions.', ico: '<path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/>' },
-  { id: 'bios', name: 'BIOS guide', note: 'Firmware settings worth changing, safest first.', ico: '<path d="M7 7h10v10H7zM10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>' }
+  { id: 'bios', name: 'BIOS guide', note: 'Firmware settings worth changing, safest first.', ico: '<path d="M7 7h10v10H7zM10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>' },
+  { id: 'settings', name: 'Settings', note: 'Theme, accent color and language.', ico: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6"/>' }
 ];
-const RISK = ['', 'Zero', 'Low', 'Medium', 'Extreme'];
+const RISK = new Proxy([], { get: (_, i) => (i === '0' ? '' : t('risk.' + i)) });
 let T = [], want = {}, cat = 'home', admin = false, win = true, busy = false, rp = true, note = '';
 const open = new Set();
 const pend = () => T.filter(t => want[t.id] !== t.applied);
@@ -36,27 +38,27 @@ function row(t) {
 function bar() {
   const p = pend(), b = $('#bar');
   b.hidden = !p.length && !note;
-  b.innerHTML = `<div class="msg"><strong>${p.length ? `${p.length} pending` : ''}</strong><span id="note"></span></div>
-    ${admin && p.length ? `<label><input type="checkbox" id="rp" ${rp ? 'checked' : ''}> Create a restore point first</label>` : ''}
-    ${p.length ? `<button id="undo" class="ghost">Discard</button><button id="go" class="primary" ${busy ? 'disabled' : ''}>${busy ? 'Applying…' : 'Apply'}</button>` : ''}`;
+  b.innerHTML = `<div class="msg"><strong>${p.length ? t('ui.pending', { n: p.length }) : ''}</strong><span id="note"></span></div>
+    ${admin && p.length ? `<label><input type="checkbox" id="rp" ${rp ? 'checked' : ''}> ${t('ui.restore')}</label>` : ''}
+    ${p.length ? `<button id="undo" class="ghost">${t('ui.discard')}</button><button id="go" class="primary" ${busy ? 'disabled' : ''}>${busy ? t('ui.applying') : t('ui.apply')}</button>` : ''}`;
   $('#note').textContent = note;
 }
 
 function render() {
   $('#nav').innerHTML = CATS.map(c => {
     const n = c.id === 'bios' ? BIOS.length : T.filter(t => t.cat === c.id && t.applied).length;
-    return `<button class="nav" data-cat="${c.id}" ${c.id === cat ? 'aria-current="page"' : ''}><svg viewBox="0 0 24 24" aria-hidden="true">${c.ico}</svg>${c.name}${n ? `<span>${n}</span>` : ''}</button>`;
+    return `<button class="nav" data-cat="${c.id}" ${c.id === cat ? 'aria-current="page"' : ''}><svg viewBox="0 0 24 24" aria-hidden="true">${c.ico}</svg>${t('nav.' + c.id)}${n ? `<span>${n}</span>` : ''}</button>`;
   }).join('');
   const c = CATS.find(x => x.id === cat);
-  $('#h').textContent = c.name; $('#hp').textContent = c.note;
+  $('#h').textContent = t('nav.' + c.id); $('#hp').textContent = t('note.' + c.id);
   $('#warn').innerHTML = (win ? '' : '<p class="warn">OpenBoost only changes Windows settings. You can browse the tweaks here, but nothing will apply.</p>') + (cat === 'network' ? dnsPanel() : '');
   if ($('#dnsmsg')) $('#dnsmsg').textContent = dnsMsg;
   const isPage = cat in PAGES;
   $('#list').hidden = $('#warn').hidden = isPage; $('#home').hidden = !isPage;
   $('#list').innerHTML = isPage ? '' : T.filter(t => t.cat === cat).sort((a, b) => a.risk - b.risk).map(row).join('');
   if (isPage) PAGES[cat](); else $('#act').innerHTML = presets();
-  $('#who').innerHTML = !win ? '' : admin ? '<span>Running as administrator</span>'
-    : '<span>Not running as administrator</span><button id="adm" class="link">Restart as administrator</button>';
+  $('#who').innerHTML = !win ? '' : admin ? `<span>${t('ui.adminOn')}</span>`
+    : `<span>${t('ui.adminOff')}</span><button id="adm" class="link">${t('ui.adminGo')}</button>`;
   bar();
 }
 
@@ -87,7 +89,7 @@ document.addEventListener('click', e => {
   const el = e.target.closest('button'); if (!el) return;
   if (el.dataset.cat) { cat = el.dataset.cat; render(); }
   else if (el.dataset.more) { const id = el.dataset.more; open.has(id) ? open.delete(id) : open.add(id); render(); }
-  else if (el.classList.contains('sw')) { want[el.dataset.id] = !want[el.dataset.id]; note = ''; render(); }
+  else if (el.classList.contains('sw') && el.dataset.id) { want[el.dataset.id] = !want[el.dataset.id]; note = ''; render(); }
   else if (el.id === 'go') go();
   else if (el.id === 'undo') { want = Object.fromEntries(T.map(t => [t.id, t.applied])); note = ''; render(); }
   else if (el.id === 'adm') api.relaunch();
@@ -146,7 +148,7 @@ function findings() {
 }
 
 function home() {
-  $('#act').innerHTML = win ? `<button id="scan" class="primary" ${scanning ? 'disabled' : ''}>${scanning ? 'Scanning…' : hw ? 'Scan again' : 'Scan system'}</button>` : '';
+  $('#act').innerHTML = win ? `<button id="scan" class="primary" ${scanning ? 'disabled' : ''}>${scanning ? t('home.scanning') : hw ? t('home.again') : t('home.scan')}</button>` : '';
   const meters = `<div class="meters">
     <div class="meter"><div><span>CPU load</span><b id="mc">0%</b></div><i><u id="bc"></u></i></div>
     <div class="meter"><div><span>Memory in use</span><b id="mm">0 GB</b></div><i><u id="bm"></u></i></div></div><div class="sect" id="procs"></div>`;
@@ -184,7 +186,7 @@ async function scan() {
 
 // ---- Presets
 const riskEl = r => `<span class="risk r${r}"><b><i></i><i></i><i></i></b>${RISK[r]}</span>`;
-const presets = () => `<div class="seg"><span>Select up to</span>${[1, 2, 3, 4].map(n => `<button data-p="${n}">${RISK[n]}</button>`).join('')}<button data-p="0">None</button></div>`;
+const presets = () => `<div class="seg"><span>${t('ui.upTo')}</span>${[1, 2, 3, 4].map(n => `<button data-p="${n}">${RISK[n]}</button>`).join('')}<button data-p="0">${t('ui.none')}</button></div>`;
 function preset(n) {
   T.filter(t => t.cat === cat).forEach(t => {
     if (!win || (t.admin && !admin) || (t.reversible === false && t.applied)) return;
@@ -213,7 +215,7 @@ function checks(s) {
 
 function benchPage() {
   const { before, after } = bench, cur = after || before;
-  $('#act').innerHTML = `<button id="bench" class="primary" ${benching ? 'disabled' : ''}>${benching ? 'Measuring…' : before ? 'Run after benchmark' : 'Run before benchmark'}</button>${before ? '<button id="breset" class="ghost">Reset</button>' : ''}`;
+  $('#act').innerHTML = `<button id="bench" class="primary" ${benching ? 'disabled' : ''}>${benching ? t('bench.busy') : before ? t('bench.after') : t('bench.before')}</button>${before ? `<button id="breset" class="ghost">${t('bench.reset')}</button>` : ''}`;
   if (!cur) { $('#home').innerHTML = `<p class="sect empty">${benching ? 'Measuring. This takes about 6 seconds.' : 'Run a benchmark before you apply tweaks, then run it again afterwards to see what changed.'}</p>`; return; }
   const rows = METRICS.map(([k, l, u, hi, d]) => {
     const a = before && before[k], b = after && after[k]; let c = '<span class="flat">—</span>';
