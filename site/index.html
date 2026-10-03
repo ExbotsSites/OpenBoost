@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenBoost — Open Source Windows Utility</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#121212',
+                        cardbg: '#181818',
+                        bordercol: '#2a2a2a',
+                        violetaccent: '#8b5cf6',
+                        violetlight: '#a78bfa'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #e5e5e5;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8b5cf6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-violet-600 selection:text-white">
+
+    <header class="border-b border-[#2a2a2a] bg-[#121212]/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2.5 font-semibold text-white tracking-tight">
+                <div class="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center text-white text-sm">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <span>OpenBoost</span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-6 text-sm text-neutral-400">
+                <a href="#features" class="hover:text-white transition-colors">Features</a>
+                <a href="#download" class="hover:text-white transition-colors">Download</a>
+                <a href="#source" class="hover:text-white transition-colors">Source Code</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <a href="https://github.com/ExbotsSites/OpenBoost" target="_blank" rel="noopener noreferrer" 
+                   class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-[#181818] hover:bg-[#222222] text-white text-xs font-medium border border-[#2a2a2a] transition-colors">
+                    <i class="fa-brands fa-github text-sm"></i>
+                    <span>GitHub</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section class="max-w-4xl mx-auto px-6 pt-20 pb-16 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#181818] border border-[#2a2a2a] text-xs font-medium text-violet-400 mb-6">
+                <span>v1.0.0 Released</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-violet-500"></span>
+                <span>Open Source</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
+                Windows utility, <br/>
+                <span class="text-violet-400">simplified and open.</span>
+            </h1>
+
+            <p class="text-base sm:text-lg text-neutral-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                A lightweight Windows optimization toolkit built with Electron & Node.js. Clean memory, manage DNS latency, and configure system tweaks without clutter.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a href="#download" class="w-full sm:w-auto px-6 py-3 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-medium text-sm transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download"></i>
+                    Download v1.0.0
+                </a>
+                <a href="https://github.com/ExbotsSites/OpenBoost" target="_blank" rel="noopener noreferrer" 
+                   class="w-full sm:w-auto px-6 py-3 rounded-lg bg-[#181818] hover:bg-[#222222] text-neutral-300 font-medium text-sm border border-[#2a2a2a] transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-github"></i>
+                    View on GitHub
+                </a>
+            </div>
+        </section>
+
+        <section id="features" class="max-w-6xl mx-auto px-6 py-16 border-t border-[#2a2a2a]">
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold text-white mb-2">Core Features</h2>
+                <p class="text-sm text-neutral-400">Designed for performance and transparency.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Feature 1 -->
+                <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-6">
+                    <div class="w-10 h-10 rounded-md bg-violet-600/10 border border-violet-500/20 text-violet-400 flex items-center justify-center mb-4 text-base">
+                        <i class="fa-solid fa-memory"></i>
+                    </div>
+                    <h3 class="text-base font-semibold text-white mb-2">Hardware Telemetry</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Monitor live CPU and RAM usage, inspect process memory overhead, and free standby cache instantly.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-6">
+                    <div class="w-10 h-10 rounded-md bg-violet-600/10 border border-violet-500/20 text-violet-400 flex items-center justify-center mb-4 text-base">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <h3 class="text-base font-semibold text-white mb-2">DNS Jumper & Benchmark</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Test and switch high-performance DNS resolvers with one click to optimize connection latency.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-6">
+                    <div class="w-10 h-10 rounded-md bg-violet-600/10 border border-violet-500/20 text-violet-400 flex items-center justify-center mb-4 text-base">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <h3 class="text-base font-semibold text-white mb-2">System Tweaks</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Toggle Windows telemetry services and performance settings safely without background bloat.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="download" class="max-w-6xl mx-auto px-6 py-16 border-t border-[#2a2a2a]">
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold text-white mb-2">Downloads</h2>
+                <p class="text-sm text-neutral-400">Choose your preferred distribution format for Windows 10 & 11 (64-bit).</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Setup Installer -->
+                <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-medium text-violet-400 uppercase tracking-wider mb-2">Standard Installer</div>
+                        <h3 class="text-lg font-semibold text-white mb-1">NSIS Setup (.exe)</h3>
+                        <p class="text-sm text-neutral-400 mb-6">Includes automatic shortcuts and standard installation.</p>
+                    </div>
+                    <a href="https://github.com/ExbotsSites/OpenBoost/releases/download/v1.0.0/OpenBoost-Setup-1.0.0.exe" 
+                       class="w-full py-2.5 rounded-md bg-violet-600 hover:bg-violet-500 text-white font-medium text-sm text-center transition-colors">
+                        Download Installer
+                    </a>
+                </div>
+
+                <!-- Portable Executable -->
+                <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Standalone</div>
+                        <h3 class="text-lg font-semibold text-white mb-1">Portable (.exe)</h3>
+                        <p class="text-sm text-neutral-400 mb-6">No installation necessary. Run directly from any directory.</p>
+                    </div>
+                    <a href="https://github.com/ExbotsSites/OpenBoost/releases/download/v1.0.0/OpenBoost-1.0.0-portable.exe" 
+                       class="w-full py-2.5 rounded-md bg-[#222222] hover:bg-[#2a2a2a] text-white font-medium text-sm text-center border border-[#2a2a2a] transition-colors">
+                        Download Portable
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="source" class="max-w-6xl mx-auto px-6 py-16 border-t border-[#2a2a2a]">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-white mb-2">Run from Source</h2>
+                <p class="text-sm text-neutral-400">Clone the repository and run locally using Node.js & Electron.</p>
+            </div>
+
+            <div class="bg-[#181818] border border-[#2a2a2a] rounded-lg p-4 font-mono text-xs text-neutral-300 relative">
+                <button onclick="copyCode()" id="copy-btn" class="absolute top-3 right-3 px-2.5 py-1 rounded bg-[#222222] hover:bg-[#2a2a2a] text-neutral-300 border border-[#2a2a2a] text-[11px] transition-colors">
+                    Copy
+                </button>
+                <pre class="overflow-x-auto pr-16"><span class="text-neutral-500"># Clone repository</span>
+git clone https://github.com/ExbotsSites/OpenBoost.git
+
+<span class="text-neutral-500"># Navigate to directory</span>
+cd OpenBoost
+
+<span class="text-neutral-500"># Install dependencies & start</span>
+npm install
+npm start</pre>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-[#2a2a2a] py-8 text-xs text-neutral-500">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                OpenBoost is open source software released under the MIT License.
+            </div>
+            <div class="flex items-center gap-4 text-neutral-400">
+                <a href="https://github.com/ExbotsSites/OpenBoost" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+                <a href="https://github.com/ExbotsSites/OpenBoost/releases" target="_blank" class="hover:text-white transition-colors">Releases</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyCode() {
+            const code = "git clone https://github.com/ExbotsSites/OpenBoost.git\ncd OpenBoost\nnpm install\nnpm start";
+            const temp = document.createElement("textarea");
+            temp.value = code;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand("copy");
+            document.body.removeChild(temp);
+
+            const btn = document.getElementById("copy-btn");
+            btn.innerText = "Copied";
+            setTimeout(() => {
+                btn.innerText = "Copy";
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
